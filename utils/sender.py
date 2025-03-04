@@ -24,8 +24,8 @@ def send_email(news_summary):
 
         # ✅ 이메일 본문 UTF-8 인코딩 설정
         #body = MIMEText(news_summary, "plain", "utf-8")
-        body = "body"
-        msg.attach(body)
+        #body = "body"
+        #msg.attach(body)
 
         print("🟢 [DEBUG] 이메일 객체 생성 완료")
 
