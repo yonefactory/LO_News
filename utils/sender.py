@@ -1,6 +1,5 @@
 import smtplib
 import requests
-import sys
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.header import Header  # ✅ 제목 UTF-8 인코딩을 위한 모듈 추가
@@ -15,20 +14,17 @@ def send_email(news_summary):
     try:
         print("🟢 [DEBUG] 이메일 전송 시작")
 
-        reload(sys)
-        sys.setdefaultencoding('utf8')
-        print("🟢 [DEBUG] setdefaultencoding")
-
         # ✅ 이메일 메시지 객체 생성
         msg = MIMEMultipart()
         
         # ✅ 제목을 UTF-8로 인코딩하여 설정
-        msg["Subject"] = str(Header("오늘의 Apple 뉴스", "utf-8"))
+        msg["Subject"] = "오늘의 Apple 뉴스"
         msg["From"] = EMAIL_SENDER
         msg["To"] = ", ".join(EMAIL_RECEIVERS)
 
         # ✅ 이메일 본문 UTF-8 인코딩 설정
-        body = MIMEText(news_summary, "plain", "utf-8")
+        #body = MIMEText(news_summary, "plain", "utf-8")
+        body = "body"
         msg.attach(body)
 
         print("🟢 [DEBUG] 이메일 객체 생성 완료")
