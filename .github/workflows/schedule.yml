@@ -4,6 +4,15 @@ on:
   schedule:
     - cron: '0 22 * * *'  # 한국 시간 기준 매일 오전 7시 실행 (UTC 22시)
   workflow_dispatch:
+    inputs:
+      TEST_MODE:
+        description: 'Enable test mode (Only fetch 1 article)'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
 
 jobs:
   run-news-bot:
@@ -26,4 +35,10 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: python main.py
+          TEST_MODE: ${{ github.event.inputs.TEST_MODE }}
+        run: |
+          if [ "$TEST_MODE" == "true" ]; then
+            python main.py --test
+          else
+            python main.py
+          fi
