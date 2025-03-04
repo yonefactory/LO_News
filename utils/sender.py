@@ -16,7 +16,7 @@ def send_email(news_summary):
         
         # ✅ 제목을 UTF-8로 올바르게 인코딩
         # msg["Subject"] = Header("오늘의 Apple 뉴스", "utf-8").encode()
-        msg["Subject"] = "Apple News"
+        # msg["Subject"] = "Apple News"
         
         msg["From"] = EMAIL_SENDER
         msg["To"] = ", ".join(EMAIL_RECEIVERS)
