@@ -18,7 +18,7 @@ def send_email(news_summary):
         msg = MIMEMultipart()
         
         # ✅ 제목을 UTF-8로 인코딩하여 설정
-        msg["Subject"] = "오늘의 Apple 뉴스"
+        msg["Subject"] = "오늘의 Apple 뉴스".encode('utf-8').strip()
         msg["From"] = EMAIL_SENDER
         msg["To"] = ", ".join(EMAIL_RECEIVERS)
 
