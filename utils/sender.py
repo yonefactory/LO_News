@@ -59,7 +59,7 @@ def send_telegram(news_summary):
         print("🟢 [DEBUG] 텔레그램 메시지 전송 시작")
 
         #message = f"📢 오늘의 Apple 뉴스 📢\n\n{news_summary}"
-        message = f"news_summary"
+        message = news_summary
         url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
 
         for chat_id in TELEGRAM_CHAT_IDS:
