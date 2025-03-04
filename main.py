@@ -2,13 +2,17 @@ from utils.scraper import get_latest_news
 from utils.sender import send_email, send_telegram
 import os
 import sys
+from datetime import datetime
 
 # ✅ GitHub Actions에서 환경 변수로 전달받은 TEST_MODE 값 적용
 TEST_MODE = os.getenv("TEST_MODE", "false").lower() == "true" or "--test" in sys.argv
 
+# ✅ 현재 날짜 가져오기 (YYYY-MM-DD 형식)
+today_date = datetime.now().strftime("%Y-%m-%d")
+
 def format_news(articles):
     """뉴스를 보기 좋은 형식으로 정리"""
-    formatted_news = "📢 오늘의 Apple 뉴스 📢\n"
+    formatted_news = f"📢 오늘의 Apple 뉴스 ({today_date}) 📢\n"  # ✅ 오늘 날짜 추가
     for article in articles:
         formatted_news += f"\n📌 {article['title']}\n"
         formatted_news += f"{article['summary']}\n"
