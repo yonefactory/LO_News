@@ -2,30 +2,36 @@ import smtplib
 import requests
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from email.header import Header  # ✅ 제목 UTF-8 인코딩을 위한 모듈 추가
 from utils.config import EMAIL_SENDER, EMAIL_PASSWORD, EMAIL_RECEIVERS, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_IDS
 
 # 이메일 SMTP 설정
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 
+def clean_ascii(text):
+    """비ASCII 문자 제거하여 SMTP 인코딩 오류 방지"""
+    return text.encode('ascii', 'ignore').decode('ascii')
+
 def send_email(news_summary):
-    """이메일 전송 (UTF-8 인코딩 적용 + 디버깅)"""
+    """이메일 전송 (ASCII 변환 적용 + 디버깅)"""
     try:
         print("🟢 [DEBUG] 이메일 전송 시작")
 
+        # ✅ 제목을 ASCII로 변환하여 인코딩 오류 방지
+        subject = clean_ascii("오늘의 Apple 뉴스")
+        
+        # ✅ 본문도 ASCII로 변환
+        ascii_summary = clean_ascii(news_summary)
+
         # ✅ 이메일 메시지 객체 생성
         msg = MIMEMultipart()
-        
-        # ✅ 제목을 UTF-8로 인코딩하여 설정
-        msg["Subject"] = "오늘의 Apple 뉴스".encode('utf-8').strip()
+        msg["Subject"] = subject
         msg["From"] = EMAIL_SENDER
         msg["To"] = ", ".join(EMAIL_RECEIVERS)
 
-        # ✅ 이메일 본문 UTF-8 인코딩 설정
-        #body = MIMEText(news_summary, "plain", "utf-8")
-        #body = "body"
-        #msg.attach(body)
+        # ✅ 이메일 본문 설정
+        body = MIMEText(ascii_summary, "plain", "utf-8")  
+        msg.attach(body)
 
         print("🟢 [DEBUG] 이메일 객체 생성 완료")
 
