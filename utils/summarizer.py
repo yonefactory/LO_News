@@ -4,12 +4,12 @@ import requests
 from bs4 import BeautifulSoup
 
 # OpenAI API 키 설정
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def translate_title(title):
     """영어 제목을 한국어로 번역"""
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "Translate the following news title into Korean."},
@@ -34,7 +34,7 @@ def summarize_article(url):
         if not full_text:
             return "요약할 내용이 부족합니다."
 
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "Summarize the following article in 5 sentences in Korean."},
