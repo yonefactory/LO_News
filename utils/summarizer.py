@@ -49,10 +49,9 @@ def summarize_article(url):
         summary = response.choices[0].message.content.strip()
 
         # ✅ 불릿 포인트 적용하여 가독성 향상
-        #bullet_summary = "\n".join([f"- {sentence.strip()}" for sentence in summary.split(".") if sentence])
+        bullet_summary = "\n".join([f"- {sentence.strip()}" for sentence in summary.split(".") if sentence])
 
-        #return bullet_summary
-        return summary
-
+        return bullet_summary
+      
     except Exception as e:
         return f"요약 오류: {e}"
