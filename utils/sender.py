@@ -26,35 +26,35 @@ def send_email(news_summary):
             for recipient in EMAIL_RECEIVERS:
                 msg["To"] = recipient
                 server.sendmail(EMAIL_SENDER, recipient, msg.as_string())
-"""
+
         # ✅ 이메일 메시지 객체 생성
-        msg = MIMEMultipart()
-        msg["Subject"] = subject
-        msg["From"] = EMAIL_SENDER
-        msg["To"] = ", ".join(EMAIL_RECEIVERS)
+        # msg = MIMEMultipart()
+        # msg["Subject"] = subject
+        # msg["From"] = EMAIL_SENDER
+        # msg["To"] = ", ".join(EMAIL_RECEIVERS)
 
         # ✅ 이메일 본문 UTF-8 인코딩 적용
-        body = MIMEText(news_summary.encode("utf-8").decode("utf-8"), "plain", "utf-8")
-        msg.attach(body)
+        # body = MIMEText(news_summary.encode("utf-8").decode("utf-8"), "plain", "utf-8")
+        # msg.attach(body)
 
-        print("🟢 [DEBUG] 이메일 객체 생성 완료")
+        # print("🟢 [DEBUG] 이메일 객체 생성 완료")
 
         # ✅ SMTP 서버 연결 및 이메일 전송
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            print("🟢 [DEBUG] SMTP 서버 연결 시도 중...")
-            server.ehlo()
-            server.starttls()
-            server.ehlo()
-            print("🟢 [DEBUG] TLS 보안 활성화 완료")
+        # with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+        #     print("🟢 [DEBUG] SMTP 서버 연결 시도 중...")
+        #     server.ehlo()
+        #     server.starttls()
+        #     server.ehlo()
+        #     print("🟢 [DEBUG] TLS 보안 활성화 완료")
 
-            print("🟢 [DEBUG] SMTP 로그인 시도 중...")
-            server.login(EMAIL_SENDER, EMAIL_PASSWORD)
-            print("🟢 [DEBUG] SMTP 로그인 성공")
+        #     print("🟢 [DEBUG] SMTP 로그인 시도 중...")
+        #     server.login(EMAIL_SENDER, EMAIL_PASSWORD)
+        #     print("🟢 [DEBUG] SMTP 로그인 성공")
 
-            print("🟢 [DEBUG] 이메일 전송 시도 중...")
-            server.sendmail(EMAIL_SENDER, EMAIL_RECEIVERS, msg.as_string())
-            print("✅ 이메일 전송 완료!")
-            ***
+        #     print("🟢 [DEBUG] 이메일 전송 시도 중...")
+        #     server.sendmail(EMAIL_SENDER, EMAIL_RECEIVERS, msg.as_string())
+        #     print("✅ 이메일 전송 완료!")
+        
 
     except smtplib.SMTPAuthenticationError:
         print("❌ [ERROR] SMTP 로그인 인증 실패! 이메일/비밀번호 또는 앱 비밀번호 확인 필요.")
