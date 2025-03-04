@@ -11,12 +11,13 @@ def format_news(articles):
     return formatted_news
 
 if __name__ == "__main__":
-    # 최신 뉴스 가져오기
     articles = get_latest_news()
-
-    # 뉴스 포맷팅
     news_summary = format_news(articles)
 
-    # 이메일 및 텔레그램으로 전송
-    send_email(news_summary)
-    send_telegram(news_summary)
+    # ✅ 디버깅: 전송할 메시지를 먼저 출력하여 확인
+    print("\n===================== 📩 이메일 & 텔레그램 전송 전 미리보기 =====================")
+    print(news_summary)
+    print("=================================================================================\n")
+
+    send_email(news_summary)  # ✅ 이메일 전송
+    send_telegram(news_summary)  # ✅ 텔레그램 전송
