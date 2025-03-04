@@ -12,9 +12,9 @@ def send_email(news_summary):
     try:
         # 이메일 메시지 객체 생성
         msg = MIMEMultipart()
-        msg["Subject"] = Header("오늘의 Apple 뉴스", "utf-8")  # 제목을 UTF-8로 인코딩
+        msg["Subject"] = str(Header("오늘의 Apple 뉴스", "utf-8"))  # ✅ 제목을 UTF-8로 인코딩
         msg["From"] = EMAIL_SENDER
-        msg["To"] = ", ".join(EMAIL_RECEIVERS)  # 여러 명에게 전송
+        msg["To"] = ", ".join(EMAIL_RECEIVERS)  # ✅ 여러 수신자 지원
 
         # 이메일 본문을 UTF-8로 인코딩하여 추가
         body = MIMEText(news_summary, "plain", "utf-8")
@@ -24,7 +24,7 @@ def send_email(news_summary):
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
             server.login(EMAIL_SENDER, EMAIL_PASSWORD)
-            server.sendmail(EMAIL_SENDER, EMAIL_RECEIVERS, msg.as_string())  # UTF-8 자동 처리됨
+            server.sendmail(EMAIL_SENDER, EMAIL_RECEIVERS, msg.as_string())  # ✅ UTF-8 자동 처리됨
 
         print("✅ 이메일 전송 완료!")
 
