@@ -16,6 +16,17 @@ def send_email(news_summary):
         # ✅ 제목과 본문 그대로 사용 (UTF-8 인코딩 적용)
         subject = "오늘의 Apple 뉴스"
 
+        msg = MIMEText(news_summary, "plain", "utf-8")
+        msg["Subject"] = "오늘의 Apple 뉴스"
+        msg["From"] = EMAIL_SENDER
+    
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login(EMAIL_SENDER, EMAIL_PASSWORD)
+            for recipient in EMAIL_RECEIVERS:
+                msg["To"] = recipient
+                server.sendmail(EMAIL_SENDER, recipient, msg.as_string())
+"""
         # ✅ 이메일 메시지 객체 생성
         msg = MIMEMultipart()
         msg["Subject"] = subject
@@ -43,6 +54,7 @@ def send_email(news_summary):
             print("🟢 [DEBUG] 이메일 전송 시도 중...")
             server.sendmail(EMAIL_SENDER, EMAIL_RECEIVERS, msg.as_string())
             print("✅ 이메일 전송 완료!")
+            ***
 
     except smtplib.SMTPAuthenticationError:
         print("❌ [ERROR] SMTP 로그인 인증 실패! 이메일/비밀번호 또는 앱 비밀번호 확인 필요.")
