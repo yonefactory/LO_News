@@ -31,7 +31,7 @@ if __name__ == "__main__":
         print("⚠️ 새로운 기사가 없으므로 전송하지 않습니다.")
         sys.exit(0)  # ✅ 새로운 기사가 없으면 실행 종료
 
-    news_summary = format_news_only_text(articles)
+    news_summary = format_news(articles)
 
     # ✅ 디버깅: 전송할 메시지를 먼저 출력하여 확인
     print("\n===================== 📩 이메일 & 텔레그램 전송 전 미리보기 =====================")
