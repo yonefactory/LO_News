@@ -25,7 +25,7 @@ def format_news_only_text(articles):
     return formatted_news
 
 if __name__ == "__main__":
-    articles = get_latest_news(test_mode=TEST_MODE)
+    articles = format_news_only_text(test_mode=TEST_MODE)
 
     if not articles:
         print("⚠️ 새로운 기사가 없으므로 전송하지 않습니다.")
