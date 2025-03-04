@@ -22,8 +22,8 @@ def send_email(news_summary):
         msg["From"] = EMAIL_SENDER
         msg["To"] = ", ".join(EMAIL_RECEIVERS)
 
-        # ✅ 이메일 본문 설정 (UTF-8 명시)
-        body = MIMEText(news_summary, "plain", "utf-8")  
+        # ✅ 이메일 본문 UTF-8 인코딩 적용
+        body = MIMEText(news_summary.encode("utf-8").decode("utf-8"), "plain", "utf-8")
         msg.attach(body)
 
         print("🟢 [DEBUG] 이메일 객체 생성 완료")
