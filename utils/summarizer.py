@@ -35,12 +35,19 @@ def summarize_article(url):
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": (
-                    "Summarize the following article in 5 sentences in Korean. "
-                    "Use formal and concise language suitable for a news article. "
-                    "Convert spoken expressions to written expressions. "
-                    "For example: '발표했습니다' → '발표', '출시되었습니다' → '출시', '예고되었습니다' → '예고'."
-                )},
+                {
+                    "role": "system",
+                    "content": (
+                        "Summarize the following article in 5 sentences in Korean. "
+                        "Use formal and concise language suitable for a news article. "
+                        "Convert spoken expressions to written expressions. "
+                        "Ensure that all sentences use a formal news reporting style. "
+                        "Remove all conversational or spoken expressions such as '했습니다', '됩니다', '예정입니다'. "
+                        "Use direct and factual statements instead. "
+                        "For example: '발표했습니다' → '발표', '출시되었습니다' → '출시', '예고되었습니다' → '예고', "
+                        "'탑재됩니다' → '탑재', '적용됩니다' → '적용', '공개될 예정입니다' → '공개'."
+                    )
+                },
                 {"role": "user", "content": full_text}
             ]
         )
