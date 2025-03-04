@@ -21,7 +21,7 @@ def format_news_only_text(articles):
     for article in articles:
         formatted_news += f"\n{article['title']}\n"
         formatted_news += f"{article['summary']}\n"
-        formatted_news += f"{article['link']}\n"
+        #formatted_news += f"{article['link']}\n"
     return formatted_news
 
 if __name__ == "__main__":
