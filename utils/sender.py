@@ -2,6 +2,7 @@ import smtplib
 import requests
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.header import Header  # ✅ 제목 UTF-8 인코딩을 위한 모듈 추가
 from utils.config import EMAIL_SENDER, EMAIL_PASSWORD, EMAIL_RECEIVERS, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_IDS
 
 # 이메일 SMTP 설정
@@ -15,7 +16,9 @@ def send_email(news_summary):
 
         # ✅ 이메일 메시지 객체 생성
         msg = MIMEMultipart()
-        msg["Subject"] = "오늘의 Apple 뉴스"  # ✅ UTF-8 자동 적용
+        
+        # ✅ 제목을 UTF-8로 인코딩하여 설정
+        msg["Subject"] = str(Header("오늘의 Apple 뉴스", "utf-8"))
         msg["From"] = EMAIL_SENDER
         msg["To"] = ", ".join(EMAIL_RECEIVERS)
 
@@ -64,7 +67,7 @@ def send_telegram(news_summary):
 
             response = requests.post(url, json=payload)
 
-            # ✅ 응답 상태 코드 확인
+            # ✅ 응답 상태 코드 확인 (200이 아니면 실패 출력)
             if response.status_code != 200:
                 print(f"⚠️ [WARNING] 텔레그램 메시지 전송 실패 (채팅 ID: {chat_id}): {response.text}")
 
