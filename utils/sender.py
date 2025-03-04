@@ -8,11 +8,11 @@ SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 
 def send_email(news_summary):
-    """이메일 전송 (UTF-8 인코딩 설정)"""
+    """이메일 전송 (UTF-8 인코딩 문제 해결)"""
     try:
         # 이메일 메시지 객체 생성
         msg = MIMEMultipart()
-        msg["Subject"] = "오늘의 Apple 뉴스"
+        msg["Subject"] = Header("오늘의 Apple 뉴스", "utf-8")  # 제목을 UTF-8로 인코딩
         msg["From"] = EMAIL_SENDER
         msg["To"] = ", ".join(EMAIL_RECEIVERS)  # 여러 명에게 전송
 
@@ -24,7 +24,7 @@ def send_email(news_summary):
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
             server.login(EMAIL_SENDER, EMAIL_PASSWORD)
-            server.sendmail(EMAIL_SENDER, EMAIL_RECEIVERS, msg.as_string().encode("utf-8"))
+            server.sendmail(EMAIL_SENDER, EMAIL_RECEIVERS, msg.as_string())  # UTF-8 자동 처리됨
 
         print("✅ 이메일 전송 완료!")
 
