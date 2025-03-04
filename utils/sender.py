@@ -22,7 +22,8 @@ def send_email(news_summary):
         msg["To"] = ", ".join(EMAIL_RECEIVERS)
 
         # ✅ 본문을 UTF-8로 인코딩하여 추가
-        body = MIMEText(news_summary, "plain", "utf-8")
+        # body = MIMEText(news_summary, "plain", "utf-8")
+        body = "hello"
         msg.attach(body)
 
         # ✅ SMTP 서버 연결 및 이메일 전송
