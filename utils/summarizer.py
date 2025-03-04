@@ -16,14 +16,13 @@ def translate_title(title):
                 {"role": "user", "content": title}
             ]
         )
-
         return response.choices[0].message.content.strip()
 
     except Exception as e:
         return f"번역 오류: {e}"
 
 def summarize_article(url):
-    """기사 본문을 5문장으로 요약, 각 문장을 불릿 포인트로 표시"""
+    """기사 본문을 뉴스 형식(문어체)으로 5문장 요약"""
     try:
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "html.parser")
@@ -36,14 +35,19 @@ def summarize_article(url):
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Summarize the following article in 5 sentences in Korean."},
+                {"role": "system", "content": (
+                    "Summarize the following article in 5 sentences in Korean. "
+                    "Use formal and concise language suitable for a news article. "
+                    "Convert spoken expressions to written expressions. "
+                    "For example: '발표했습니다' → '발표', '출시되었습니다' → '출시', '예고되었습니다' → '예고'."
+                )},
                 {"role": "user", "content": full_text}
             ]
         )
 
         summary = response.choices[0].message.content.strip()
 
-        # ✅ 요약된 문장을 개별 문장으로 분리하여 불릿 리스트로 변환
+        # ✅ 불릿 포인트 적용하여 가독성 향상
         bullet_summary = "\n".join([f"- {sentence.strip()}" for sentence in summary.split(". ") if sentence])
 
         return bullet_summary
