@@ -1,6 +1,7 @@
 import json
 import os
 import requests
+import feedparser  # RSS 피드 파싱을 위한 라이브러리
 from bs4 import BeautifulSoup
 from utils.summarizer import translate_title, summarize_article
 
@@ -19,7 +20,7 @@ def save_sent_articles(sent_articles):
         json.dump(sent_articles, f, ensure_ascii=False, indent=4)
 
 def fetch_news_from_site(url, title_selector, link_selector, base_url="", limit=1):
-    """특정 사이트에서 최신 뉴스 크롤링 (테스트 모드에서는 limit=1 적용)"""
+    """일반적인 웹 크롤링 방식으로 최신 뉴스 가져오기"""
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
     articles = []
@@ -33,16 +34,31 @@ def fetch_news_from_site(url, title_selector, link_selector, base_url="", limit=
         summary = summarize_article(link)
         articles.append({"title": translated_title, "link": link, "summary": summary})
 
-        if len(articles) >= limit:  # ✅ 테스트 모드에서는 최근 1개만 가져오기
+        if len(articles) >= limit:
             break
+
+    return articles
+
+def fetch_news_from_rss(rss_url, limit=1):
+    """RSS 피드를 사용하여 뉴스 가져오기"""
+    feed = feedparser.parse(rss_url)
+    articles = []
+
+    for entry in feed.entries[:limit]:  # limit 개수만큼 기사 가져오기
+        title = entry.title
+        link = entry.link
+        translated_title = translate_title(title)
+        summary = summarize_article(link)
+
+        articles.append({"title": translated_title, "link": link, "summary": summary})
 
     return articles
 
 def get_latest_news(test_mode=False):
     """최신 뉴스 가져오기 (중복 방지)"""
     news_sources = [
-        {"url": "https://9to5mac.com/", "title_selector": "a.title", "link_selector": "a.title", "base_url": ""},
-        {"url": "https://www.macrumors.com/", "title_selector": "a.title", "link_selector": "a.title", "base_url": "https://www.macrumors.com"},
+        {"url": "https://9to5mac.com/", "title_selector": "h2 a", "link_selector": "h2 a", "base_url": "", "use_rss": False},
+        {"url": "https://www.macrumors.com/", "rss_url": "https://www.macrumors.com/macrumors.xml", "use_rss": True},
     ]
 
     all_articles = []
@@ -50,13 +66,17 @@ def get_latest_news(test_mode=False):
 
     for source in news_sources:
         print(f"🔍 [DEBUG] '{source['url']}' 사이트에서 기사 추출 시작...")
-        articles = fetch_news_from_site(
-            source["url"],
-            source["title_selector"],
-            source["link_selector"],
-            source["base_url"],
-            limit=1 if test_mode else 5  # ✅ 테스트 모드일 때는 1개만 가져오기
-        )
+
+        if source.get("use_rss"):
+            articles = fetch_news_from_rss(source["rss_url"], limit=1 if test_mode else 5)
+        else:
+            articles = fetch_news_from_site(
+                source["url"],
+                source["title_selector"],
+                source["link_selector"],
+                source["base_url"],
+                limit=1 if test_mode else 5
+            )
         
         print(f"📰 [DEBUG] '{source['url']}' 사이트에서 {len(articles)}개의 기사 추출 완료:")
         for article in articles:
