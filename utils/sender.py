@@ -25,6 +25,10 @@ def send_email(news_summary):
                 msg["Subject"] = subject
                 msg["From"] = EMAIL_SENDER
                 msg["To"] = recipient
+                
+                print(f"🟢 [DEBUG] 이메일을 {recipient}에게 전송 중...")
+                server.sendmail(EMAIL_SENDER, recipient, msg.as_string())
+                print(f"✅ [INFO] 이메일이 {recipient}에게 성공적으로 전송되었습니다.")
     except smtplib.SMTPAuthenticationError:
         print("❌ [ERROR] SMTP 로그인 인증 실패! 이메일/비밀번호 또는 앱 비밀번호 확인 필요.")
     except smtplib.SMTPConnectError:
