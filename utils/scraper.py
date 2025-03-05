@@ -43,8 +43,6 @@ def get_latest_news(test_mode=False):
     news_sources = [
         {"url": "https://9to5mac.com/", "title_selector": "a.title", "link_selector": "a.title", "base_url": ""},
         {"url": "https://www.macrumors.com/", "title_selector": "a.title", "link_selector": "a.title", "base_url": "https://www.macrumors.com"},
-        {"url": "https://www.apple.com/kr/newsroom/", "title_selector": "a.headline", "link_selector": "a.headline", "base_url": "https://www.apple.com"},
-        {"url": "https://kr.investing.com/equities/apple-computer-inc-news", "title_selector": "a.title", "link_selector": "a.title", "base_url": "https://kr.investing.com"}
     ]
 
     all_articles = []
