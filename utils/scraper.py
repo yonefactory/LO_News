@@ -51,6 +51,7 @@ def get_latest_news(test_mode=False):
     sent_articles = load_sent_articles()  # ✅ 이미 보낸 기사 목록 불러오기
 
     for source in news_sources:
+        print(f"🔍 [DEBUG] '{source['url']}' 사이트에서 기사 추출 시작...")
         articles = fetch_news_from_site(
             source["url"],
             source["title_selector"],
@@ -59,7 +60,10 @@ def get_latest_news(test_mode=False):
             limit=1 if test_mode else 5  # ✅ 테스트 모드일 때는 1개만 가져오기
         )
         
+        print(f"📰 [DEBUG] '{source['url']}' 사이트에서 {len(articles)}개의 기사 추출 완료:")
         for article in articles:
+            print(f"    - 제목: {article['title']}")
+            print(f"      링크: {article['link']}")
             if article["link"] not in sent_articles:  # ✅ 이미 보낸 기사와 중복되지 않도록 필터링
                 sent_articles.append(article["link"])
                 all_articles.append(article)
