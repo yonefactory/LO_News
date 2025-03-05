@@ -1,7 +1,6 @@
 import smtplib
 import requests
 from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from utils.config import EMAIL_SENDER, EMAIL_PASSWORD, EMAIL_RECEIVERS, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_IDS
 
 # 이메일 SMTP 설정
@@ -13,48 +12,21 @@ def send_email(news_summary):
     try:
         print("🟢 [DEBUG] 이메일 전송 시작")
 
-        # ✅ 제목과 본문 그대로 사용 (UTF-8 인코딩 적용)
+        # 이메일 제목과 본문 설정
         subject = "오늘의 Apple 뉴스"
-
         msg = MIMEText(news_summary, "plain", "utf-8")
-        msg["Subject"] = "오늘의 Apple 뉴스"
+        msg["Subject"] = subject
         msg["From"] = EMAIL_SENDER
-    
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+
+        # SMTP 서버에 연결
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
             server.login(EMAIL_SENDER, EMAIL_PASSWORD)
             for recipient in EMAIL_RECEIVERS:
                 msg["To"] = recipient
+                print(f"🟢 [DEBUG] 이메일을 {recipient}에게 전송 중...")
                 server.sendmail(EMAIL_SENDER, recipient, msg.as_string())
-
-        # ✅ 이메일 메시지 객체 생성
-        # msg = MIMEMultipart()
-        # msg["Subject"] = subject
-        # msg["From"] = EMAIL_SENDER
-        # msg["To"] = ", ".join(EMAIL_RECEIVERS)
-
-        # ✅ 이메일 본문 UTF-8 인코딩 적용
-        # body = MIMEText(news_summary.encode("utf-8").decode("utf-8"), "plain", "utf-8")
-        # msg.attach(body)
-
-        # print("🟢 [DEBUG] 이메일 객체 생성 완료")
-
-        # ✅ SMTP 서버 연결 및 이메일 전송
-        # with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-        #     print("🟢 [DEBUG] SMTP 서버 연결 시도 중...")
-        #     server.ehlo()
-        #     server.starttls()
-        #     server.ehlo()
-        #     print("🟢 [DEBUG] TLS 보안 활성화 완료")
-
-        #     print("🟢 [DEBUG] SMTP 로그인 시도 중...")
-        #     server.login(EMAIL_SENDER, EMAIL_PASSWORD)
-        #     print("🟢 [DEBUG] SMTP 로그인 성공")
-
-        #     print("🟢 [DEBUG] 이메일 전송 시도 중...")
-        #     server.sendmail(EMAIL_SENDER, EMAIL_RECEIVERS, msg.as_string())
-        #     print("✅ 이메일 전송 완료!")
-        
+                print(f"✅ [INFO] 이메일이 {recipient}에게 성공적으로 전송되었습니다.")
 
     except smtplib.SMTPAuthenticationError:
         print("❌ [ERROR] SMTP 로그인 인증 실패! 이메일/비밀번호 또는 앱 비밀번호 확인 필요.")
@@ -70,7 +42,6 @@ def send_telegram(news_summary):
     try:
         print("🟢 [DEBUG] 텔레그램 메시지 전송 시작")
 
-        #message = f"📢 오늘의 Apple 뉴스 📢\n\n{news_summary}"
         message = news_summary
         url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
 
@@ -80,13 +51,11 @@ def send_telegram(news_summary):
 
             response = requests.post(url, json=payload)
 
-            # ✅ 응답 상태 코드 확인 (200이 아니면 실패 출력)
-            if response.status_code != 200:
+            # 응답 상태 코드 확인 (200이 아니면 실패 출력)
+            if response.status_code == 200:
+                print(f"✅ [INFO] 텔레그램 메시지가 {chat_id}에게 성공적으로 전송되었습니다.")
+            else:
                 print(f"⚠️ [WARNING] 텔레그램 메시지 전송 실패 (채팅 ID: {chat_id}): {response.text}")
-
-            response.raise_for_status()
-
-        print("✅ 텔레그램 메시지 전송 완료!")
 
     except requests.exceptions.ConnectionError:
         print("❌ [ERROR] 텔레그램 API 연결 실패! 네트워크 상태 확인 필요.")
