@@ -12,22 +12,19 @@ def send_email(news_summary):
     try:
         print("🟢 [DEBUG] 이메일 전송 시작")
 
-        # 이메일 제목과 본문 설정
+        # 이메일 제목 설정
         subject = "오늘의 Apple 뉴스"
-        msg = MIMEText(news_summary, "plain", "utf-8")
-        msg["Subject"] = subject
-        msg["From"] = EMAIL_SENDER
-
+    
         # SMTP 서버에 연결
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
             server.login(EMAIL_SENDER, EMAIL_PASSWORD)
             for recipient in EMAIL_RECEIVERS:
+                # 각 수신자마다 새로운 MIMEText 객체 생성
+                msg = MIMEText(news_summary, "plain", "utf-8")
+                msg["Subject"] = subject
+                msg["From"] = EMAIL_SENDER
                 msg["To"] = recipient
-                print(f"🟢 [DEBUG] 이메일을 {recipient}에게 전송 중...")
-                server.sendmail(EMAIL_SENDER, recipient, msg.as_string())
-                print(f"✅ [INFO] 이메일이 {recipient}에게 성공적으로 전송되었습니다.")
-
     except smtplib.SMTPAuthenticationError:
         print("❌ [ERROR] SMTP 로그인 인증 실패! 이메일/비밀번호 또는 앱 비밀번호 확인 필요.")
     except smtplib.SMTPConnectError:
