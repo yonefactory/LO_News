@@ -24,8 +24,8 @@ def fetch_news_from_site(url, title_selector, link_selector, base_url="", limit=
     soup = BeautifulSoup(response.text, "html.parser")
     articles = []
 
-    for title_tag, link_tag in zip(soup.select(title_selector), soup.select(link_selector)):
-        title = title_tag.text.strip()
+    for link_tag in soup.select(link_selector):
+        title = link_tag.text.strip()
         link = link_tag.get("href", "")
         if not link.startswith("http"):
             link = base_url + link
@@ -41,10 +41,10 @@ def fetch_news_from_site(url, title_selector, link_selector, base_url="", limit=
 def get_latest_news(test_mode=False):
     """최신 뉴스 가져오기 (중복 방지)"""
     news_sources = [
-        #{"url": "https://9to5mac.com/", "title_selector": "h2 a", "link_selector": "h2 a", "base_url": ""},
-        {"url": "https://www.macrumors.com/", "title_selector": ".title a", "link_selector": ".title a", "base_url": "https://www.macrumors.com"},
-        {"url": "https://www.apple.com/kr/newsroom/", "title_selector": ".headline a", "link_selector": ".headline a", "base_url": "https://www.apple.com"},
-        {"url": "https://kr.investing.com/equities/apple-computer-inc-news", "title_selector": ".textDiv a.title", "link_selector": ".textDiv a.title", "base_url": "https://kr.investing.com"}
+        #{"url": "https://9to5mac.com/", "title_selector": "a.title", "link_selector": "a.title", "base_url": ""},
+        {"url": "https://www.macrumors.com/", "title_selector": "a.title", "link_selector": "a.title", "base_url": "https://www.macrumors.com"},
+        {"url": "https://www.apple.com/kr/newsroom/", "title_selector": "a.headline", "link_selector": "a.headline", "base_url": "https://www.apple.com"},
+        {"url": "https://kr.investing.com/equities/apple-computer-inc-news", "title_selector": "a.title", "link_selector": "a.title", "base_url": "https://kr.investing.com"}
     ]
 
     all_articles = []
