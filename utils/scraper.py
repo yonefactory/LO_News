@@ -41,7 +41,7 @@ def fetch_news_from_site(url, title_selector, link_selector, base_url="", limit=
 def get_latest_news(test_mode=False):
     """최신 뉴스 가져오기 (중복 방지)"""
     news_sources = [
-        {"url": "https://9to5mac.com/", "title_selector": "h2 a", "link_selector": "h2 a", "base_url": ""},
+        #{"url": "https://9to5mac.com/", "title_selector": "h2 a", "link_selector": "h2 a", "base_url": ""},
         {"url": "https://www.macrumors.com/", "title_selector": ".title a", "link_selector": ".title a", "base_url": "https://www.macrumors.com"},
         {"url": "https://www.apple.com/kr/newsroom/", "title_selector": ".headline a", "link_selector": ".headline a", "base_url": "https://www.apple.com"},
         {"url": "https://kr.investing.com/equities/apple-computer-inc-news", "title_selector": ".textDiv a.title", "link_selector": ".textDiv a.title", "base_url": "https://kr.investing.com"}
