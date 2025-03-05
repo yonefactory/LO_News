@@ -3,12 +3,14 @@ from utils.sender import send_email, send_telegram
 import os
 import sys
 from datetime import datetime
+import pytz  # ✅ pytz 라이브러리 임포트
 
 # ✅ GitHub Actions에서 환경 변수로 전달받은 TEST_MODE 값 적용
 TEST_MODE = os.getenv("TEST_MODE", "false").lower() == "true" or "--test" in sys.argv
 
-# ✅ 현재 날짜 가져오기 (YYYY-MM-DD 형식)
-today_date = datetime.now().strftime("%Y-%m-%d")
+# ✅ 한국 시간대 설정
+KST = pytz.timezone('Asia/Seoul')
+today_date = datetime.now(KST).strftime("%Y-%m-%d")
 
 def format_news(articles):
     """뉴스를 보기 좋은 형식으로 정리"""
